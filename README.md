@@ -19,9 +19,7 @@ The API which developed using REST is know as REST API/RESTful API.
 
 ### CRUD Operation:
 
-| Create | POST |Creating/Posting/ Inserting Data |
-
-| Read | GET | Reading/ Getting/Retrieving Data |
-
-| Update | PUT, PATCH | Updaing Data - Complete Update PUT - Partial Update PATCH |
-| Delete | DELETE | Deleting Data |
+    | Create | POST |Creating/Posting/ Inserting Data |
+    | Read | GET | Reading/ Getting/Retrieving Data |
+    | Update | PUT, PATCH | Updaing Data - Complete Update PUT - Partial Update PATCH |
+    | Delete | DELETE | Deleting Data |
