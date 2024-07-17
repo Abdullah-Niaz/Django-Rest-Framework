@@ -53,3 +53,97 @@ Django rest framework is powerfull web API toolkit for building WEB APIs.
     `INSTALLED_APPS = [
         'rest_framework',
     ]`
+
+
+## Python JSON
+Python has a builtin package called json, which is used to work with json data.
+- json.dumps() - This function converts a python object into a json string.
+Example:-
+- To use the json data first we need to import
+
+```Python 
+import json 
+data = {
+    'name': 'John',
+    'age': 30,
+    'city': 'New York',
+}
+json_data = json.dumps(data)
+print(json_data)
+```
+- json.loads() - This function converts a json string into a python object.
+Example:-
+```Python 
+import json 
+data = {
+    'name': 'John',
+    'age': 30,
+    'city': 'New York',
+}
+json_data = json.load(data)
+print(json_data)
+```
+
+
+# Serializers
+- In Django REST Framework, serializer are responsible for converting comples data suchas querysets and model instances to native Python Datatypes ( called serialization) that can be easily rendered into JSON, XML or other content types which is understandable by Frontend.
+- Serializer are also responsible for taking data from a "deserialized" format ( like JSON) and converting
+it into a complex data structure ( like a model instance or query set) for use in our application
+( called deserialization).
+
+## Serializer Class
+- A serializer class is very similar to a Django Form and ModelForm class, and includes similar validation glags on the various fields, such as required, max_length and default.
+-  DRF Provides a serializer class which gives youa powerfull, generic way to control the output of your responses,as wel as ModelSerializer class which provides a usefull shortcut for creating serializers that deal with model instances and querysets.
+
+## How to Create Serializer Class
+- Create a new file called serializer.py in your app directory.
+- Create a new class called UserSerializer which inherits from the serializer class.
+- Add a Meta class to the serializer class which contains the following attributes.
+- model - The model class that this serializer is responsible for serializing.
+- fields - A list of fields that should be included in the serialized output.
+- Create a new method called create() which will be called when a POST request is made to the
+viewset.
+- Create a new method called update() which will be called when a PUT request is made to the
+viewset.
+
+``` python 
+# serializer.py
+from rest_framework import serializers
+class StudentSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=100)
+    roll_no = serializers.IntegerField()
+    city = serializers.CharField(max_length=100)
+```
+
+``` Python
+# models.py
+class student(models.Model):
+    name = serializers.CharField(max_length=100)
+    roll_no = serializers.IntegerField()
+    city = serializers.CharField(max_length=100)
+```
+
+Complex Data type --------------> Python Native DataType -------------------> Json Data
+                   Serialization                           Render it to json
+
+## Serialization:
+The process of converting comples data such as querysets and model instances to native python datatypes are called as Serialization in DRF.
+- Creating Model instance student
+    student = Student.objects.get(id=1)
+- Creating model instance student to python Dict/Serializing Objects
+    serializer = StudentSerializer(student)
+- creating QuerySet
+    students = Student.objects.all()
+- Creating QuerySet to python Dict/Serializing QuerySet
+    serializer = StudentSerializer(students, many=True)
+
+- Serialized Data printer
+    serialized.data
+
+- JsonRender
+    This is used to render serialized data into json which is understandable by frontend.
+``` python
+    importing JSONRenderer
+    from rest_framework.renderers import JSONRenderer
+    json_data = JSONRenderer().render(serializer.data)
+```
