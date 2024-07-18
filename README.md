@@ -158,3 +158,56 @@ JsonResponse(data,ecoder=Django.JSONEncoder, safe =True, json_dumps_parms = None
 4. The encoder, which defaults to django.core.serializers.json.DjangoJSONEncoder, will be used to serialize the data.
 5. The safe boolean parameter defaults to True. If it's set to False, any objects can be passed for serialization (otherwise only dict instance are allowed). If safe is True and a non-dict object is passed as the first argument, a TypeError will be raised. 
 6. The json_dumps_params parameter is dictionary of keyword arguments to pass to the json.dumps() call used to generate the response.
+
+## Deserialization
+Serializers are also responsible for deserializatino which means it allows parsed data to be converted back into complex types, after first walidating the incoming data.
+
+Deserialization allows parsed data to be converted back into complex types, after first validating the incoming data.
+
+### BytesIO()
+A stream implementaation using an in memory bytes buffer. It inherits BufferedIOBasee. The buffer is discarded when the close() method is called.
+
+```Python
+import io
+stream = io.BytesIO(json_data)
+```
+
+### JSONParser()
+The JSONParser class is used to parse JSON data into Python objects. It inherits most behaviour from its
+superclass with a couple differences:
+1. Its default Content Type header is set to application/json.
+2. The first parameter, data, should be a string instance. If the stream parameter is set
+to True, the data parameter can be any file-like object.
+3. The parser, which defaults to django.core.serializers.json.DjangoJSONParser, will be used to parse the data.
+4. The stream parameter defaults to False. If it's set to True, the data parameter can be any file-like object.
+
+```python
+from rest_framework.parsers import JSONParser
+parsed_data = JSONParser().parse(stream)
+```
+
+Creating Serializer Object
+```Python
+serializer = StudentSerializer(data=parsed_data)
+```
+
+Validating Data
+```python
+serializer.is_valid(raise_exception=True) 
+serializer.validated_data
+serializer.errors
+```
+
+### Create Data/Insert Data
+```Python
+from rest_framework import serializers
+class StudentSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=100)
+    roll = serializers.IntegerField()
+    city = serializers.CharField(max_length=100)
+
+    def create(self,validate_data):
+        return Student.objects.create(**validate_data)
+```
+
+  
