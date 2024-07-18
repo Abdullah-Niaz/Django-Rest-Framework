@@ -147,3 +147,14 @@ The process of converting comples data such as querysets and model instances to 
     from rest_framework.renderers import JSONRenderer
     json_data = JSONRenderer().render(serializer.data)
 ```
+
+- JsonResponse()
+``` Python
+JsonResponse(data,ecoder=Django.JSONEncoder, safe =True, json_dumps_parms = None, **kwargs)
+```
+1. An HttpResponse subclass that helps to create a JSON encoder response. It inherits most behaviour from its superclass with a couple differences:
+2. Its default Content Type header is set to application/json.
+3. The first parameter, data, should be a dict instance. If the safe parameter is set to False it can be any JSON serializable object.
+4. The encoder, which defaults to django.core.serializers.json.DjangoJSONEncoder, will be used to serialize the data.
+5. The safe boolean parameter defaults to True. If it's set to False, any objects can be passed for serialization (otherwise only dict instance are allowed). If safe is True and a non-dict object is passed as the first argument, a TypeError will be raised. 
+6. The json_dumps_params parameter is dictionary of keyword arguments to pass to the json.dumps() call used to generate the response.
