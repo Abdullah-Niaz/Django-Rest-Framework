@@ -18,12 +18,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from home import views
+from home.views import *
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'todo-view-set', Todo_View, basename='todo-view-set')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("",views.home,name="home"),
     path("hello/", views.hello_world, name="hello"),
     path("post_todo/",views.post_todo,name="post_todo"),
-    path("get_todo/",views.get_todo,name="get_todo")
+    path("get_todo/",views.get_todo,name="get_todo"),
+    path("patch_todo/",views.patch_todo,name="todo_patch"),
+    path('todo/', TodoView.as_view(), name='todo_view'),
 
 ]
+urlpatterns += router.urls
+

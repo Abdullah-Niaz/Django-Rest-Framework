@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+
 from rest_framework.response import Response
 from .serializer import TodoSerailizer
 from .models import Todo
@@ -99,3 +101,107 @@ def post_todo(request):
         "status": False,
         "message": "soemthing Went Wrong",
     })
+
+
+
+@api_view(['PATCH'])
+def patch_todo(request):
+    data = request.data
+    uid = data.get('uid')
+
+    if not uid:
+        return Response({
+            "status": False,
+            "message": "UID is required",
+            "data": {}
+        }, status=400)
+    
+    try:
+        obj = Todo.objects.get(uid=uid)
+    except Todo.DoesNotExist:
+        return Response({
+            "status": False,
+            "message": "Invalid UID",
+            "data": {}
+        }, status=404)
+    
+    serializer = TodoSerailizer(obj, data=data, partial=True)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response({
+            "status": True,
+            "message": "Updated Successfully",
+            "data": serializer.data
+        })
+    
+    return Response({
+        "status": False,
+        "message": "Invalid Data",
+        "data": serializer.errors
+    }, status=400)
+
+
+class TodoView(APIView):
+    def get(self, request):
+        return Response({
+            "status": 200,
+            "message": "Yes Django Rest Framework is Working!",
+            "method_called": "You called the GET Method"
+        })
+
+    def post(self, request):
+        return Response({
+            "status": 200,
+            "message": "Yes Django Rest Framework is Working!",
+            "method_called": "You called the POST Method"
+        })
+
+    def patch(self, request):
+        data = request.data
+        uid = data.get('uid')
+
+        if not uid:
+            return Response({
+                "status": False,
+                "message": "UID is required",
+                "data": {}
+            }, status=400)
+        
+        try:
+            obj = Todo.objects.get(uid=uid)
+        except Todo.DoesNotExist:
+            return Response({
+                "status": False,
+                "message": "Invalid UID",
+                "data": {}
+            }, status=404)
+        
+        serializer = TodoSerailizer(obj, data=data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "status": True,
+                "message": "Updated Successfully",
+                "data": serializer.data
+            })
+        
+        return Response({
+            "status": False,
+            "message": "Invalid Data",
+            "data": serializer.errors
+        }, status=400)
+
+    def delete(self, request):
+        return Response({
+            "status": 200,
+            "message": "Yes Django Rest Framework is Working!",
+            "method_called": "You called the DELETE Method"
+        })
+
+from rest_framework import mixins, viewsets
+
+class Todo_View(viewsets.ReadOnlyModelViewSet):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerailizer
