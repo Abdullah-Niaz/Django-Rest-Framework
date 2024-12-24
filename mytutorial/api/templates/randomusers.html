@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'api/style.css' %}" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>User Profiles</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Profile Picture</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Location</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Phone</th>
+            <th>Cell</th>
+            <th>Date of Birth</th>
+            <th>Nationality</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in data %}
+          <tr>
+            <td>
+              <img
+                class="user-image"
+                src="{{ user.picture }}"
+                alt="{{ user.name }}'s profile picture"
+              />
+            </td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.gender }}</td>
+            <td>
+              {{ user.location.street }}, {{ user.location.city }}, {{
+              user.location.state }}, {{ user.location.country }}
+            </td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.cell }}</td>
+            <td>{{ user.dob }}</td>
+            <td>{{ user.nationality }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
