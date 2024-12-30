@@ -17,9 +17,15 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
 from . import views
+
+
+router = routers.DefaultRouter()
+router.register(r"drinks", views.modelViewDrinkList)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("drinks/", views.drink_list),
+    path("api/", include(router.urls)),
+    # path("drinks/", views.drink_list()),
 ]
